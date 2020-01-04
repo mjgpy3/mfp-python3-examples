@@ -28,7 +28,7 @@ class Cell:
     return list(self.links.keys())
 
   def is_linked(self, cell):
-    return cell in links
+    return cell in self.links
 
   def neighbors(self):
     list = []
