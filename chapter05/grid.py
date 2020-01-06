@@ -138,5 +138,8 @@ class Grid:
 
     return output
 
+  def deadends(self):
+    return [cell for cell in self.each_cell() if len(cell.links) == 1]
+
 def flatten_list_of_tuples_to_tuple(lot):
   return tuple(v for t in lot for v in t)
