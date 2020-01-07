@@ -115,8 +115,10 @@ class Grid:
       for cell in row:
         if not cell:
           cell = Cell(-1, -1)
+          body = (cell_size-1) * [black]
+        else:
+          body = (cell_size-1) * [self.background_color_for(cell)]
 
-        body = (cell_size-1) * [self.background_color_for(cell)]
         if cell.is_linked(cell.east):
           east_boundary = [self.background_color_for(cell)]
         else:
