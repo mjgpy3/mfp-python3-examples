@@ -3,6 +3,11 @@
 from random import randrange
 
 class Mask:
+  @staticmethod
+  def from_txt(file):
+    with open(file, 'r') as f:
+      lines = []
+
   def __init__(self, rows, columns):
     self.rows, self.columns = rows, columns
     self.bits = [[True for _ in range(columns)] for _ in range(rows)]
