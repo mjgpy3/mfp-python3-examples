@@ -12,7 +12,12 @@ class MaskedGrid(Grid):
     grid = []
 
     for row in range(self.rows):
-      grid.append([Cell(row, column) for column in range(self.columns) if self.mask[(row, column)]])
+      grid.append([])
+      for column in range(self.columns):
+        if self.mask[(row, column)]:
+          grid[row].append(Cell(row, column))
+        else:
+          grid[row].append(None)
 
     return grid
 
