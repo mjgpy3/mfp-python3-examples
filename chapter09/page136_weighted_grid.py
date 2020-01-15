@@ -23,9 +23,9 @@ class WeightedGrid(Grid):
       distance = self.distances[cell]
 
       if not distance:
-        return super()
+        return super().background_color_for(cell)
 
       intensity = 64 + 191 * (self.maximum - distance) / self.maximum
       return (intensity, intensity, 0)
 
-    return super()
+    return super().background_color_for(cell)
