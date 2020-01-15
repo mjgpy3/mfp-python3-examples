@@ -2,7 +2,7 @@
 
 from cell import *
 from random import choice, shuffle, random
-import png
+from PIL import Image, ImageDraw
 
 class Grid:
   def __init__(self, rows, columns):
@@ -91,54 +91,97 @@ class Grid:
 
     return output
 
-  def write_png(self, file_name, cell_size = 10):
-    s = self.to_png_rgbs(cell_size)
-
-    w = png.Writer(len(s[0])//3, len(s), greyscale=False)
-    with open(file_name, 'wb') as f:
-      w.write(f, s)
-
   def background_color_for(self, cell):
     return (255, 255, 255)
 
-  # Really more of an adapted `__str__` than the book's example since the
-  # `pypng` interface doesn't have `line` a la ChunkyPNG
-  def to_png_rgbs(self, cell_size = 10):
-    black = (0, 0, 0)
+  def to_png(self, cell_size = 10, inset = 0):
+    img_width = cell_size * self.columns
+    img_height = cell_size * self.rows
+    inset = int(cell_size * inset)
 
-    output = [flatten_list_of_tuples_to_tuple(self.columns * cell_size * [black] + [black])]
+    background = (255, 255, 255)
+    wall = (0, 0, 0)
 
-    for row in self.each_row():
-      top = [black]
-      bottom = [black]
+    img = Image.new('RGB', size=(img_width + 1, img_height + 1), color=background)
+    draw = ImageDraw.Draw(img)
 
-      for cell in row:
-        if not cell:
-          cell = Cell(-1, -1)
-          body = (cell_size-1) * [black]
+    for mode in ['backgrounds', 'walls']:
+      for cell in self.each_cell():
+        x = cell.column * cell_size
+        y = cell.row * cell_size
+
+        if inset > 0:
+          self.to_png_with_inset(draw, cell, mode, cell_size, wall, x, y, inset)
         else:
-          body = (cell_size-1) * [self.background_color_for(cell)]
+          self.to_png_without_inset(draw, cell, mode, cell_size, wall, x, y)
 
-        if cell.is_linked(cell.east):
-          east_boundary = [self.background_color_for(cell)]
-        else:
-          east_boundary = [black]
+    return img
 
-        top = top + body + east_boundary
+  def to_png_without_inset(self, draw, cell, mode, cell_size, wall, x, y):
+    x1, y1 = x, y
+    x2 = x1 + cell_size
+    y2 = y1 + cell_size
 
-        if cell.is_linked(cell.south):
-          south_boundary = (cell_size-1) * [self.background_color_for(cell)]
-        else:
-          south_boundary = (cell_size-1) * [black]
+    if mode == 'backgrounds':
+      color = self.background_color_for(cell)
+      if color:
+        draw.rectangle([x, y, x2, y2], fill=color, outline=color)
+    else:
+      if not cell.north:
+        draw.line([(x1, y1), (x2, y1)], fill=wall)
 
-        corner = [black]
-        bottom = bottom + south_boundary + corner
+      if not cell.west:
+        draw.line([(x1, y1), (x1, y2)], fill=wall)
 
-      for _ in range(cell_size):
-        output.append(flatten_list_of_tuples_to_tuple(top))
-      output.append(flatten_list_of_tuples_to_tuple(bottom))
+      if not cell.is_linked(cell.east):
+        draw.line([(x2, y1), (x2, y2)], fill=wall)
 
-    return output
+      if not cell.is_linked(cell.south):
+        draw.line([(x1, y2), (x2, y2)], fill=wall)
+
+  def cell_coordinates_with_inset(self, x, y, cell_size, inset):
+    x1, x4 = x, x + cell_size
+    x2 = x1 + inset
+    x3 = x4 - inset
+
+    y1, y4 = y, y + cell_size
+    y2 = y1 + inset
+    y3 = y4 - inset
+
+    return (x1, x2, x3, x4,
+             y1, y2, y3, y4)
+
+  def to_png_with_inset(self, draw, cell, mode, cell_size, wall, x, y, inset):
+    x1, x2, x3, x4, y1, y2, y3, y4 = (
+      self.cell_coordinates_with_inset(x, y, cell_size, inset)
+    )
+
+    if mode == 'backgrounds':
+      pass
+    else:
+      if cell.is_linked(cell.north):
+        draw.line([(x2, y1), (x2, y2)], fill=wall)
+        draw.line([(x3, y1), (x3, y2)], fill=wall)
+      else:
+        draw.line([(x2, y2), (x3, y2)], fill=wall)
+
+      if cell.is_linked(cell.south):
+        draw.line([(x2, y3), (x2, y4)], fill=wall)
+        draw.line([(x3, y3), (x3, y4)], fill=wall)
+      else:
+        draw.line([(x2, y3), (x3, y3)], fill=wall)
+
+      if cell.is_linked(cell.west):
+        draw.line([(x1, y2), (x2, y2)], fill=wall)
+        draw.line([(x1, y3), (x2, y3)], fill=wall)
+      else:
+        draw.line([(x2, y2), (x2, y3)], fill=wall)
+
+      if cell.is_linked(cell.east):
+        draw.line([(x3, y2), (x4, y2)], fill=wall)
+        draw.line([(x3, y3), (x4, y3)], fill=wall)
+      else:
+        draw.line([(x3, y2), (x3, y3)], fill=wall)
 
   def deadends(self):
     return [cell for cell in self.each_cell() if len(cell.links) == 1]
