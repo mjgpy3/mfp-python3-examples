@@ -1,5 +1,13 @@
 # mfp-python3-examples
-Examples in [Mazes for Programmers](http://www.mazesforprogrammers.com/) in Python3
+Examples from [Mazes for Programmers](http://www.mazesforprogrammers.com/) in Python 3
+
+## Deps
+
+ - Python 3
+ - pillow
+ - pypng (hope to get rid of this one)
+ - povray
+
 
 ## ./chapter02/sidewinder.png 
 ![./chapter02/sidewinder.png](./chapter02/sidewinder.png)
