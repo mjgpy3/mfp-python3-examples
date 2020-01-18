@@ -96,3 +96,18 @@ Examples in [Mazes for Programmers](http://www.mazesforprogrammers.com/) in Pyth
 
 ## ./chapter13/3d.png
 ![./chapter13/3d.png](./chapter13/3d.png)
+
+## ./chapter14/cylinder.png
+![./chapter14/cylinder.png](./chapter14/cylinder.png)
+
+## ./chapter14/moebius.png
+![./chapter14/moebius.png](./chapter14/moebius.png)
+
+## ./chapter14/cube.png
+![./chapter14/cube.png](./chapter14/cube.png)
+
+## ./chapter14/sphere-map.png
+![./chapter14/sphere-map.png](./chapter14/sphere-map.png)
+
+## ./chapter14/sphere.png
+![./chapter14/sphere.png](./chapter14/sphere.png)
