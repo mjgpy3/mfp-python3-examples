@@ -87,3 +87,9 @@ Examples in [Mazes for Programmers](http://www.mazesforprogrammers.com/) in Pyth
 
 ## ./chapter11/prims-simple.png
 ![./chapter11/prims-simple.png](./chapter11/prims-simple.png)
+
+## ./chapter12/ellers.png
+![./chapter12/ellers.png](./chapter12/ellers.png)
+
+## ./chapter12/recursive_division.png
+![./chapter12/recursive_division.png](./chapter12/recursive_division.png)
