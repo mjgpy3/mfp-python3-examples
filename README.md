@@ -93,3 +93,6 @@ Examples in [Mazes for Programmers](http://www.mazesforprogrammers.com/) in Pyth
 
 ## ./chapter12/recursive_division.png
 ![./chapter12/recursive_division.png](./chapter12/recursive_division.png)
+
+## ./chapter13/3d.png
+![./chapter13/3d.png](./chapter13/3d.png)
